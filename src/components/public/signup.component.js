@@ -1,6 +1,5 @@
 import React, { Component  } from "react";
 import FormValidator from '../shared/FormValidator';
-import { Navigate } from "react-router-dom";
 import { useNavigate } from 'react-router-dom';
 
 const SERVER_URL = `http://localhost:4200/api/auth`;
@@ -21,7 +20,8 @@ const SERVER_URL = `http://localhost:4200/api/auth`;
             method: 'isEmpty',
             validWhen: false,
             message: 'Enter lastname.'
-            }, {
+            }, 
+            {
             field: 'email',
             method: 'isEmpty',
             validWhen: false,
