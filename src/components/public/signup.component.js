@@ -1,10 +1,15 @@
 import React, { Component  } from "react";
 import FormValidator from '../shared/FormValidator';
+import { Navigate } from "react-router-dom";
+import { useNavigate } from 'react-router-dom';
+
+const SERVER_URL = `http://localhost:4200/api/auth`;
 
 
-export default class SignUp extends Component {
+ class SignUp extends Component {
     constructor(){
         super();
+        
         this.validator = new FormValidator([
             {
                 field: 'firstname',
@@ -53,6 +58,8 @@ export default class SignUp extends Component {
                 this.submitted = false;
             
     }
+
+
     passwordMatch = (confirmation, state) => (state.password === confirmation)
         handleInputChange = event => {
         event.preventDefault();
@@ -60,6 +67,7 @@ export default class SignUp extends Component {
         [event.target.name]: event.target.value,
         });
         }
+
 handleFormSubmit = event => {
 event.preventDefault();
 const validation = this.validator.validate(this.state);
@@ -69,29 +77,65 @@ validation
 this.submitted = true;
 if(validation.isValid) {
 //reaches here if form validates successfully...
-    console.log(this.state);
+    fetch(`${SERVER_URL}/signup`, {
+        "method": "POST",
+        "headers": {
+          "content-type": "application/json",
+          "accept": "application/json"
+        },
+        "body": JSON.stringify({
+            firstname: this.state.firstname,
+            lastname: this.state.lastname,
+            email: this.state.email,
+            password: this.state.password,
+        })
+      })
+      .then(response => response.json())
+      .then(response => {
+        alert(response?.message);
+        this.props.navigate('/sign-in');
+
+
+
+
+      })
+      .catch(err => {
+        console.log(err);
+      });
 }}
+handleChange = event => {
+    const target = event.target;
+    const value = target.type === 'checkbox' ? target.checked : target.value;
+    const name = target.name;
+    this.setState({
+        [name]: value
+      });
+ }
     render() {
         let validation = this.submitted ?this.validator.validate(this.state) : this.state.validation
-        console.log('validation' , validation);
         return (
             <form>
                 <h3>Sign Up</h3>
                 <div className="form-group" className={validation.firstname.isInvalid ? 'has-error' : undefined}>
                     <label htmlFor="firstname">First name</label>
-                    <input type="text" className="form-control" name="firstname"  placeholder="First name" />
+                    <input type="text" className="form-control" name="firstname" 
+onChange={this.handleChange} placeholder="First name" />
                 </div>
                 <div className="form-group" className={validation.lastname.isInvalid ? 'has-error' : undefined}>
                     <label>Last name</label>
-                    <input type="text" className="form-control" name="lastname"  placeholder="Last name" />
+                    <input type="text" onChange={this.handleChange} className="form-control" name="lastname"  placeholder="Last name" />
                 </div>
                 <div className="form-group" className={validation.email.isInvalid ? 'has-error' : undefined}>
                     <label>Email address</label>
-                    <input type="email" className="form-control" name="email" placeholder="Enter email" />
+                    <input type="email" onChange={this.handleChange} className="form-control" name="email" placeholder="Enter email" />
                 </div>
                 <div className="form-group" className={validation.password.isInvalid ? 'has-error' : undefined}>
                     <label>Password</label>
-                    <input type="password" className="form-control" name="password" placeholder="Enter password" />
+                    <input type="password" onChange={this.handleChange} className="form-control" name="password" placeholder="Enter password" />
+                </div>
+                <div className="form-group" className={validation.password_confirmation.isInvalid ? 'has-error' : undefined}>
+                    <label>Password Confirmation</label>
+                    <input type="password" onChange={this.handleChange} className="form-control" name="password_confirmation" placeholder="Enter password" />
                 </div>
                 <button type="submit" className="btn btn-primary btn-block" onClick={this.handleFormSubmit}>Sign Up</button>
                 <p className="forgot-password text-right">
@@ -101,3 +145,9 @@ if(validation.isValid) {
         );
     }
 }
+function WithNavigate(props) {
+    let navigate = useNavigate();
+    return <SignUp {...props} navigate={navigate} />
+}
+
+export default WithNavigate

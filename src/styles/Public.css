@@ -1,4 +1,6 @@
-
+.has-error{
+  border-bottom: 1px solid red;
+}
 .auth-wrapper {
   display: flex;
   justify-content: center;
