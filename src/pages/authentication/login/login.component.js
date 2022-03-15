@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import FormValidator from '../shared/FormValidator';
+import FormValidator from '../../../utlis/validators/FormValidator';
 import { useNavigate } from 'react-router-dom';
 const SERVER_URL = `http://localhost:4200/api/auth`;
 
