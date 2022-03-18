@@ -8,7 +8,7 @@ import Error from '../../components/shared/Error/index';
 import Dashboard from '../dashboard/index';
 import React, { useState, useEffect } from "react";
 import AuthService from "../../services/auth.service";
-
+import Home from '../home/index';
 function App() {
   const [currentUser, setCurrentUser] = useState(undefined);
   useEffect(() => {
@@ -20,6 +20,8 @@ function App() {
   const logOut = () => {
     AuthService.logout();
   };
+
+
   return (
     <><div className="App">
 <nav className="navbar navbar-expand-lg navbar-light fixed-top">
@@ -32,7 +34,7 @@ function App() {
                 <><li className="nav-item">
                   <Link className="nav-link" to={"/dashboard"}>Dashboard</Link>
                 </li><li className="nav-item">
-                    <a href="/login" className="nav-link" onClick={logOut}>
+                    <a href="/sign-in" className="nav-link" onClick={logOut}>
                       LogOut
                     </a>
                   </li></>
@@ -49,7 +51,7 @@ function App() {
         </nav>
         <div className="container mt-3">
         <Routes>
-         <Route path="/" element={<Login />} /> 
+         <Route path="/" element={<Home />} /> 
          <Route path="/dashboard" element={<Dashboard />} />
          <Route path="*" element={<Error />} /> 
          <Route path="/sign-in" element={<Login />} />
