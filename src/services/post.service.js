@@ -1,9 +1,9 @@
 import axios from "axios";
 import authHeader from "./auth-header";
-const API_URL = `http://localhost:4200/api/auth/post`;
+const API_URL = `http://localhost:4200/api/post`;
 
 const getPost = () => {
-  return axios.get(API_URL );
+  return axios.get(API_URL , { headers: authHeader() });
 };
 const getPostById = (id) => {
   return axios.get(API_URL +id , { headers: authHeader() });
